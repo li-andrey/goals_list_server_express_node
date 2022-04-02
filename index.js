@@ -7,7 +7,6 @@ app.use(express.json())
 app.use(cors())
 app.use(express.static('build'))
 
-/* sdfsfsefsefsef */
 let goals = [
   {
     "id": 1648807448725,
@@ -89,10 +88,46 @@ app.get('/api/goals', (_request, response) => {
   response.json(goals)
 })
 
-/* app.post('/api/goals', (request, response) => {
-  const goal = request.body
+const generateId = () => {
+  const maxId = goals.length > 0
+    ? Math.max(...goals.map(n => n.id))
+    : 0
+  return maxId + 1
+}
+
+app.post('/api/goals', (request, response) => {
+  const body = request.body
+  if (!body) {
+    return response.status(400).json({
+      error: 'content missing'
+    })
+  }
+
+  const goal = {
+    title: body.title,
+    date: body.date,
+    importance: body.importance,
+    achieved: "false",
+    id: generateId(),
+  }
+
+  goals = goals.concat(goal)
+
   response.json(goal)
-}) */
+})
+
+app.put('/api/goals/:id', (request, response, next) => {
+  const body = request.body
+  const achievedGoal = {
+    ...body,
+    achieved: true
+  }
+
+  goals.map((g) => g.id !== achievedGoal.id ? g : achievedGoal)
+
+  response.json(achievedGoal)
+    .catch(error => next(error))
+})
 
 app.delete('/api/goals/:id', (request, response) => {
   const id = Number(request.params.id)
