@@ -17,7 +17,7 @@ let goals = [
   },
   {
     "id": 1648808058227,
-    "achieved": "false",
+    "achieved": false,
     "title": "Работаю web developer в хорошей компании",
     "date": "2022-06-01",
     "importance": "10"
@@ -45,7 +45,7 @@ let goals = [
   },
   {
     "id": 1648812328316,
-    "achieved": "false",
+    "achieved": false,
     "title": "Съездил отдохнуть в Тайланд/Индонезия/Вьетнам/Корея",
     "date": "2022-12-31",
     "importance": "6"
@@ -107,7 +107,7 @@ app.post('/api/goals', (request, response) => {
     title: body.title,
     date: body.date,
     importance: body.importance,
-    achieved: "false",
+    achieved: false,
     id: generateId(),
   }
 
@@ -122,11 +122,9 @@ app.put('/api/goals/:id', (request, response, next) => {
     ...body,
     achieved: true
   }
-
-  goals.map((g) => g.id !== achievedGoal.id ? g : achievedGoal)
+  goals = goals.map((g) => g.id !== achievedGoal.id ? g : achievedGoal)
 
   response.json(achievedGoal)
-    .catch(error => next(error))
 })
 
 app.delete('/api/goals/:id', (request, response) => {
