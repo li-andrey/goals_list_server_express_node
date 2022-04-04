@@ -120,8 +120,9 @@ app.put('/api/goals/:id', (request, response, next) => {
   const body = request.body
   const achievedGoal = {
     ...body,
-    achieved: true
+    achieved: !body.achieved
   }
+  console.log(achievedGoal)
   goals = goals.map((g) => g.id !== achievedGoal.id ? g : achievedGoal)
 
   response.json(achievedGoal)
